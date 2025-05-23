@@ -7,6 +7,7 @@ const animeSchema = new mongoose.Schema({
   progress: { type: Number, default: 0 },
   rating: { type: Number, min: 0, max: 10 },
   tags: [String],
+  images: [{type: String}],
   createdAt: { type: Date, default: Date.now }
 });
 

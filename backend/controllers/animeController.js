@@ -1,4 +1,5 @@
 const Anime = require('../models/anime');
+const mongoose = require('mongoose');
 
 // 取得目前user的所有動畫
 const getAllAnimes = async (req, res) => {
@@ -61,13 +62,18 @@ const getByStatus = async (req, res) => {
 // 統計 API：觀看狀態分佈、熱門標籤
 const getStats = async (req, res) => {
   try {
+    console.log('getStats:', req.user._id);
+    console.log('req.user:', req.user);
+    // console.log('req:', req);
+
+    const userObjectId = new mongoose.Types.ObjectId(req.user.id);
     const statusStats = await Anime.aggregate([
-      { $match: { userId: req.user._id } },
+      { $match: { userId: userObjectId } },
       { $group: { _id: '$status', count: { $sum: 1 } } }
     ]);
 
     const tagStats = await Anime.aggregate([
-      { $match: { userId: req.user._id } },
+      { $match: { userId: userObjectId } },
       { $unwind: '$tags' },
       { $group: { _id: '$tags', count: { $sum: 1 } } },
       { $sort: { count: -1 } }
@@ -75,6 +81,7 @@ const getStats = async (req, res) => {
 
     res.json({ success: true, data: { statusStats, tagStats } });
   } catch (err) {
+    console.error('統計資料錯誤:', err);
     res.status(500).json({ success: false, error: '取得統計資料失敗' });
   }
 };
