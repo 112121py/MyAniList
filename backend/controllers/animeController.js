@@ -1,5 +1,7 @@
 const Anime = require('../models/anime');
 const mongoose = require('mongoose');
+const path = require('path');
+const fs = require('fs');
 
 // 取得目前user的所有動畫
 const getAllAnimes = async (req, res) => {
@@ -86,11 +88,30 @@ const getStats = async (req, res) => {
   }
 };
 
+const uploadImage = async (req, res) => {
+  try {
+    const anime = await Anime.findOne({ _id: req.params.id, userId: req.user.id });
+    if (!anime) {
+      return res.status(404).json({ success: false, error: '找不到動畫或無權限' });
+    }
+
+    const imagePath = `/uploads/${req.file.filename}`;
+    anime.images.push(imagePath);
+    await anime.save();
+
+    res.json({ success: true, message: '圖片上傳成功', path: imagePath });
+  } catch (err) {
+    console.error('圖片上傳錯誤:', err);
+    res.status(500).json({ success: false, error: '圖片上傳失敗' });
+  }
+};
+
 module.exports = {
   getAllAnimes,
   createAnime,
   updateAnime,
   deleteAnime,
   getByStatus,
-  getStats
+  getStats,
+  uploadImage
 };
