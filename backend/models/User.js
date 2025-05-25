@@ -4,7 +4,8 @@ const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  followedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 });
 
 // 加密密碼

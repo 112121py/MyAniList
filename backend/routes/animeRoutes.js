@@ -25,4 +25,5 @@ router.get('/stats', getStats);
 router.post('/:id/upload-image', upload.single('image'), uploadImage);
 
 
+
 module.exports = router;

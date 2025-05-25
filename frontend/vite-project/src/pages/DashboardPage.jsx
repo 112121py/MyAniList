@@ -105,13 +105,13 @@ const handleImageUpload = async (e, animeId) => {
                 <p>狀態：{anime.status}</p>
                 <p>進度：{anime.progress} 集</p>
                 <p>評分：{anime.rating}/10</p>
-                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', flexDirection: 'column', alignItems: 'center' }}>
                     {anime.images && anime.images.map((img, idx) => (
                         <img
                         key={idx}
                         src={`http://localhost:5000${img}`}
                         alt={`${img}`}
-                        style={{ maxWidth: '200px', maxHeight: '200px' }}
+                        style={{ maxWidth: '400px', maxHeight: '200px' }}
                         />
                     ))}
                 </div>
