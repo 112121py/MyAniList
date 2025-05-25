@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const animeRoutes = require('./routes/animeRoutes');
+const path = require('path');
 
 dotenv.config();
 const app = express();
@@ -16,6 +17,8 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/anime', animeRoutes);
+// app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // DB & Server
 mongoose.connect(process.env.MONGODB_URI)

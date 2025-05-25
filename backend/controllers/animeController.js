@@ -2,6 +2,23 @@ const Anime = require('../models/anime');
 const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
+const multer = require('multer');
+const crypto = require('crypto');
+
+// 處理圖片檔名
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname); // 取得副檔名 (.jpg, .png...)
+    const uniqueName = crypto.randomBytes(16).toString('hex') + ext;
+    cb(null, uniqueName);
+  }
+});
+
+const upload = multer({ storage });
+
 
 // 取得目前user的所有動畫
 const getAllAnimes = async (req, res) => {
@@ -97,6 +114,7 @@ const uploadImage = async (req, res) => {
 
     const imagePath = `/uploads/${req.file.filename}`;
     anime.images.push(imagePath);
+    console.log('上傳的圖片路徑:', imagePath);
     await anime.save();
 
     res.json({ success: true, message: '圖片上傳成功', path: imagePath });

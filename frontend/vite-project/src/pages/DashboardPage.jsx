@@ -110,8 +110,8 @@ const handleImageUpload = async (e, animeId) => {
                         <img
                         key={idx}
                         src={`http://localhost:5000${img}`}
-                        alt="動畫圖片"
-                        style={{ width: '100px', height: 'auto' }}
+                        alt={`${img}`}
+                        style={{ maxWidth: '200px', maxHeight: '200px' }}
                         />
                     ))}
                 </div>
